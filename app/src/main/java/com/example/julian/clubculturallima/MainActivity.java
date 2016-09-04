@@ -1,0 +1,190 @@
+package com.example.julian.clubculturallima;
+
+import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.julian.clubculturallima.Utils.SessionManager;
+import com.facebook.login.LoginManager;
+import com.squareup.picasso.Picasso;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    //@Bind(R.id.drawer_layout)
+    DrawerLayout dl;
+    //@Bind(R.id.toolbar)
+    Toolbar toolbar;
+    //@Bind(R.id.navigation)
+    NavigationView nav;
+    //@Bind(R.id.txt_nav_header)
+    TextView txt_nav;
+    //@Bind(R.id.profile)
+    CircleImageView img;
+    SessionManager session;
+
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+        toolbar=(Toolbar)findViewById(R.id.toolbar);
+        nav=(NavigationView)findViewById(R.id.navigation);
+        dl=(DrawerLayout)findViewById(R.id.drawer_layout);
+        View v=nav.getHeaderView(0);
+        txt_nav=(TextView)v.findViewById(R.id.txt_nav_header);
+        img=(CircleImageView)v.findViewById(R.id.profile);
+
+        /* Validar si existe sesión*/
+        session = new SessionManager(getApplicationContext());
+        session.checkLogin();
+        HashMap<String,String> user=session.getUserDetails();
+        getDatos(user.get(SessionManager.KEY_EMAIL));
+
+
+
+        //toolbar.setNavigationIcon(R.drawable.menu);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+        toolbar.animate();
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dl.openDrawer(GravityCompat.START);
+                if (dl.isDrawerOpen(GravityCompat.START)) {
+                    dl.closeDrawers();
+                }
+            }
+        });
+
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,dl,toolbar,R.string.openDrawer,
+                R.string.closeDrawer){
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+            }
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+            }
+        };
+        dl.setDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+
+        Fragment frag1 = RecoFragment.newInstance();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.flaContenido, frag1);
+        ft.commit();
+
+        nav.setNavigationItemSelectedListener(this);
+
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        switch(item.getItemId()){
+            case R.id.logout:
+                session.logoutUser();
+                LoginManager.getInstance().logOut();
+                return true;
+            case R.id.reco:
+                Fragment reco=RecoFragment.newInstance();
+                ft.replace(R.id.flaContenido,reco);
+                toolbar.setTitle("Recomendaciones");
+                ft.commit();
+                dl.closeDrawers();
+                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.perfil:
+                dl.closeDrawers();
+                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.act:
+                Fragment libros=ActivitiesFragment.newInstance();
+                ft.replace(R.id.flaContenido,libros);
+                toolbar.setTitle("Actividades");
+                ft.commit();
+                dl.closeDrawers();
+                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
+                return true;
+        }
+        return false;
+    }
+
+    public void getDatos(final String u) {
+        final RequestQueue queue = Volley.newRequestQueue(this);
+
+        String url = "https://tesis-service.herokuapp.com/Usuario";
+
+        // Request a string response from the provided URL.
+        final StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        System.out.println("***** "+response+" ****");
+                        JSONParser p=new JSONParser();
+                        try{
+                            JSONObject o=(JSONObject)p.parse(response);
+                            System.out.println("*** nombre: "+o.get("nombre").toString());
+                            txt_nav.setText(o.get("nombre").toString());
+                            Picasso.with(MainActivity.this).load(o.get("foto").toString()).into(img);
+                        }catch (Exception e){
+                            System.out.println("error: "+e);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", error.toString());
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("correo", u);
+
+                return params;
+            }
+        };
+        queue.add(postRequest);
+    }
+}
