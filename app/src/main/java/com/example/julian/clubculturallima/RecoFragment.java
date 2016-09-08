@@ -41,7 +41,6 @@ import java.util.Map;
 public class RecoFragment extends Fragment {
 
     ListView list;
-
     ArrayAdapter<String> mLeadsAdapter;
     String idU="";
     ProgressDialog pDialog;
@@ -115,6 +114,7 @@ public class RecoFragment extends Fragment {
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = "https://tesis-service.herokuapp.com/recomendacion";
+        String url2 = "http://192.168.1.15:8080/Tesis_SQL/prediccion";
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override

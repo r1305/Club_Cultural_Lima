@@ -2,17 +2,15 @@ package com.example.julian.clubculturallima;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -34,8 +32,6 @@ import org.json.simple.parser.JSONParser;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -51,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //@Bind(R.id.profile)
     CircleImageView img;
     SessionManager session;
+    String datos;
 
 
 
@@ -59,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+
         toolbar=(Toolbar)findViewById(R.id.toolbar);
         nav=(NavigationView)findViewById(R.id.navigation);
         dl=(DrawerLayout)findViewById(R.id.drawer_layout);
@@ -131,6 +128,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.perfil:
+                Fragment perfil=ProfileFragment.newInstance(datos);
+                ft.replace(R.id.flaContenido,perfil);
+                toolbar.setTitle("Perfil");
+                ft.commit();
                 dl.closeDrawers();
                 Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
                 return true;
@@ -161,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         JSONParser p=new JSONParser();
                         try{
                             JSONObject o=(JSONObject)p.parse(response);
-                            System.out.println("*** nombre: "+o.get("nombre").toString());
+                            datos=o.toString();
                             txt_nav.setText(o.get("nombre").toString());
                             Picasso.with(MainActivity.this).load(o.get("foto").toString()).into(img);
                         }catch (Exception e){

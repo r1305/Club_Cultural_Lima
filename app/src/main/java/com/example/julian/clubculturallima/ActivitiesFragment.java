@@ -43,7 +43,6 @@ import java.util.Map;
 
 public class ActivitiesFragment extends Fragment {
     ListView list;
-
     ArrayAdapter<String> mLeadsAdapter;
     String idU="";
     ProgressDialog pDialog;
