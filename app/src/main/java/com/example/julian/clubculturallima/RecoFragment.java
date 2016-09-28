@@ -1,10 +1,9 @@
 package com.example.julian.clubculturallima;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -45,6 +44,7 @@ public class RecoFragment extends Fragment {
     String idU="";
     ProgressDialog pDialog;
     SessionManager session;
+
     public RecoFragment() {
         // Required empty public constructor
     }
@@ -70,7 +70,6 @@ public class RecoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_reco, container, false);
-        list=(ListView)view.findViewById(R.id.actividades_reco);
         //getRecomendacion(idU);
         new DoInBackGround().execute();
 
@@ -140,6 +139,10 @@ public class RecoFragment extends Fragment {
                                 @Override
                                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                                     Toast.makeText(getActivity(), list.getAdapter().getItem(i).toString(), Toast.LENGTH_SHORT).show();
+                                    FragmentTransaction ft=getFragmentManager().beginTransaction();
+                                    Fragment detail=ActivityDetailFragment.newInstance();
+                                    ft.replace(R.id.flaContenido,detail);
+                                    ft.commit();
                                 }
                             });
 

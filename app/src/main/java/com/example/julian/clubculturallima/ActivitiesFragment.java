@@ -2,24 +2,19 @@ package com.example.julian.clubculturallima;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -38,15 +33,17 @@ import org.json.simple.parser.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
-public class ActivitiesFragment extends Fragment {
-    ListView list;
-    ArrayAdapter<String> mLeadsAdapter;
+public class ActivitiesFragment extends Fragment implements RecyclerView.OnItemTouchListener{
+
     String idU="";
     ProgressDialog pDialog;
     SessionManager session;
+
+    RecyclerView activity;
+    ActivityRecyclerAdapter adapter;
+    List<JSONObject> l=new ArrayList<>();
 
     public ActivitiesFragment() {
         // Required empty public constructor
@@ -65,8 +62,6 @@ public class ActivitiesFragment extends Fragment {
         session=new SessionManager(getActivity().getApplicationContext());
         HashMap<String,String> datos=session.getUserDetails();
         idU=datos.get(SessionManager.KEY_EMAIL);
-        //Toast.makeText(getActivity(), idU, Toast.LENGTH_SHORT).show();
-
     }
 
     @Override
@@ -74,18 +69,37 @@ public class ActivitiesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_activities, container, false);
-        list=(ListView)view.findViewById(R.id.actividades);
+        activity=(RecyclerView)view.findViewById(R.id.recycler_view_activities);
+        activity.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter=new ActivityRecyclerAdapter(l);
+
+        activity.setAdapter(adapter);
+
         new DoInBackGround().execute();
-        //getRecomendacion(idU);
 
         return view;
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+    }
+
+    @Override
+    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
     }
 
     public class DoInBackGround extends AsyncTask<Void,Void,Void> {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            getRecomendacion(idU);
+            getActivities();
 
             return null;
         }
@@ -112,11 +126,11 @@ public class ActivitiesFragment extends Fragment {
         }
     }
 
-    public List<String> getRecomendacion(final String id) {
-        final List<String> l = new ArrayList<>();
+    public void getActivities() {
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = "https://tesis-service.herokuapp.com/getActivities";
+        String url2 = "http://192.168.1.13:8080/TesisWs/getActivities";
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -129,21 +143,11 @@ public class ActivitiesFragment extends Fragment {
                             obj = (JSONObject) jp.parse(response);
                             JSONArray ja = (JSONArray) obj.get("act");
                             for(int i=0;i<ja.size();i++){
-                                l.add(ja.get(i).toString());
+                                l.add((JSONObject)ja.get(i));
                             }
-                            mLeadsAdapter = new ArrayAdapter<>(
-                                    getActivity(),
-                                    android.R.layout.simple_list_item_1,l);
-                            list.setAdapter(mLeadsAdapter);
+                            adapter.notifyDataSetChanged();
 
                             pDialog.dismiss();
-
-                            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                    Toast.makeText(getActivity(), list.getAdapter().getItem(i).toString(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
 
                         } catch (ParseException e) {
                             Toast.makeText(getActivity(),e.toString(), Toast.LENGTH_SHORT).show();
@@ -163,9 +167,6 @@ public class ActivitiesFragment extends Fragment {
                 }
         );
         queue.add(postRequest);
-
-
-        return l;
     }
 
 }
