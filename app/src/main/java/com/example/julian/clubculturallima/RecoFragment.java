@@ -6,6 +6,8 @@ import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
@@ -39,15 +41,19 @@ import java.util.Map;
 
 public class RecoFragment extends Fragment {
 
-    ListView list;
-    ArrayAdapter<String> mLeadsAdapter;
     String idU="";
     ProgressDialog pDialog;
     SessionManager session;
 
+    RecyclerView reco;
+    RecomendacionesRecyclerAdapter adapter;
+    List<JSONObject> l=new ArrayList<>();
+
     public RecoFragment() {
         // Required empty public constructor
     }
+
+
 
     // TODO: Rename and change types and number of parameters
     public static RecoFragment newInstance() {
@@ -71,6 +77,21 @@ public class RecoFragment extends Fragment {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_reco, container, false);
         //getRecomendacion(idU);
+        reco=(RecyclerView)view.findViewById(R.id.recycler_view_reco);
+        reco.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter=new RecomendacionesRecyclerAdapter(l);
+
+        reco.setAdapter(adapter);
+        adapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                JSONObject o=(JSONObject)view.getTag();
+                FragmentTransaction ft=getFragmentManager().beginTransaction();
+                Fragment details=DetailActivityFragment.newInstance(o.toString());
+                ft.replace(R.id.flaContenido,details);
+                ft.commit();
+            }
+        });
         new DoInBackGround().execute();
 
         return view;
@@ -108,12 +129,11 @@ public class RecoFragment extends Fragment {
         }
     }
 
-    public List<String> getRecomendacion(final String id) {
-        final List<String> l = new ArrayList<>();
+    public void getRecomendacion(final String id) {
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = "https://tesis-service.herokuapp.com/recomendacion";
-        String url2 = "http://192.168.1.15:8080/Tesis_SQL/prediccion";
+        String url2 = "http://192.168.1.14:8080/TesisWs/recomendacion";
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -126,25 +146,11 @@ public class RecoFragment extends Fragment {
                             obj = (JSONObject) jp.parse(response);
                             JSONArray ja = (JSONArray) obj.get("reco");
                             for(int i=0;i<ja.size();i++){
-                                l.add(ja.get(i).toString());
+                                l.add((JSONObject)ja.get(i));
                             }
-                            mLeadsAdapter = new ArrayAdapter<>(
-                                    getActivity(),
-                                    android.R.layout.simple_list_item_1,l);
-                            list.setAdapter(mLeadsAdapter);
+                            adapter.notifyDataSetChanged();
 
                             pDialog.dismiss();
-
-                            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                    Toast.makeText(getActivity(), list.getAdapter().getItem(i).toString(), Toast.LENGTH_SHORT).show();
-                                    FragmentTransaction ft=getFragmentManager().beginTransaction();
-                                    Fragment detail=ActivityDetailFragment.newInstance();
-                                    ft.replace(R.id.flaContenido,detail);
-                                    ft.commit();
-                                }
-                            });
 
                         } catch (ParseException e) {
                             Toast.makeText(getActivity(),e.toString(), Toast.LENGTH_SHORT).show();
@@ -171,9 +177,6 @@ public class RecoFragment extends Fragment {
             }
         };
         queue.add(postRequest);
-
-
-        return l;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.example.julian.clubculturallima;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -74,6 +75,16 @@ public class ActivitiesFragment extends Fragment implements RecyclerView.OnItemT
         adapter=new ActivityRecyclerAdapter(l);
 
         activity.setAdapter(adapter);
+        adapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                JSONObject o=(JSONObject)view.getTag();
+                FragmentTransaction ft=getFragmentManager().beginTransaction();
+                Fragment activity=DetailActivityFragment.newInstance(o.toString());
+                ft.replace(R.id.flaContenido,activity);
+                ft.commit();
+            }
+        });
 
         new DoInBackGround().execute();
 

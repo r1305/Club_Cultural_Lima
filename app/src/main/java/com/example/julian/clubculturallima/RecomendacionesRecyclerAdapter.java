@@ -18,7 +18,11 @@ public class RecomendacionesRecyclerAdapter extends RecyclerView.Adapter<Recomen
 
 
     List<JSONObject> list=new ArrayList<>();
+    View.OnClickListener listener;
 
+    public RecomendacionesRecyclerAdapter(List<JSONObject> list) {
+        this.list = list;
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -28,7 +32,10 @@ public class RecomendacionesRecyclerAdapter extends RecyclerView.Adapter<Recomen
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         JSONObject o=list.get(position);
-        holder.reco.setText(o.get("actividad").toString());
+        holder.reco.setText(o.get("nombre").toString());
+        holder.fecha.setText(o.get("fecha").toString());
+        holder.itemView.setTag(o);
+        holder.itemView.setOnClickListener(listener);
     }
 
     @Override
@@ -41,6 +48,10 @@ public class RecomendacionesRecyclerAdapter extends RecyclerView.Adapter<Recomen
         }
     }
 
+    public void setOnClickListener(View.OnClickListener listener){
+        this.listener = listener;
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView reco,fecha;
@@ -48,6 +59,7 @@ public class RecomendacionesRecyclerAdapter extends RecyclerView.Adapter<Recomen
         public ViewHolder(View itemView) {
             super(itemView);
             reco=(TextView)itemView.findViewById(R.id.item_reco);
+            fecha=(TextView)itemView.findViewById(R.id.item_reco_fecha);
             reco.setTextSize(25);
 
         }

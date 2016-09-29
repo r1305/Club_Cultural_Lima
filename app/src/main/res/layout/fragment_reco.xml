@@ -5,11 +5,13 @@
     tools:context="com.example.julian.clubculturallima.RecoFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <ListView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view_reco"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/recycler_view_reco">
+        android:layout_marginLeft="3sp"
+        android:layout_marginRight="3sp">
 
-    </ListView>
+    </android.support.v7.widget.RecyclerView>
 
 </FrameLayout>
