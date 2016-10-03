@@ -88,7 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:backgroundTint="@android:color/holo_red_dark"
+            android:backgroundTint="@android:color/holo_blue_light"
             android:src="@android:drawable/ic_menu_save"
             android:text="Guardar" />
 

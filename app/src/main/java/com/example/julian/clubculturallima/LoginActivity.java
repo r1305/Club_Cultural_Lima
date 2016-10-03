@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -51,6 +52,22 @@ public class LoginActivity extends AppCompatActivity {
         clave = (EditText) findViewById(R.id.clave);
         login = (Button) findViewById(R.id.btn_login);
         signup = (Button) findViewById(R.id.btn_sign_up);
+
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                login(user.getText().toString(),clave.getText().toString());
+            }
+        });
+
+        signup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(LoginActivity.this,SignUpActivity.class);
+                startActivity(i);
+                LoginActivity.this.finish();
+            }
+        });
 
         LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions("user_friends");
@@ -157,8 +174,6 @@ public class LoginActivity extends AppCompatActivity {
 
     public class Validate extends AsyncTask<Void,Void,Void> {
 
-
-
         @Override
         protected Void doInBackground(Void... voids) {
             getFbData();
@@ -178,5 +193,49 @@ public class LoginActivity extends AppCompatActivity {
             super.onPostExecute(aVoid);
 
         }
+    }
+
+    public void login(final String u, final String p) {
+        final RequestQueue queue = Volley.newRequestQueue(this);
+
+        String url = "https://tesis-service.herokuapp.com/login";
+
+        // Request a string response from the provided URL.
+
+        final StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        if (response.equals("error")) {
+                            Toast.makeText(LoginActivity.this, "¡Usuario o contraseña incorrecta!", Toast.LENGTH_SHORT).show();
+
+                        } else {
+                            session.createLoginSession(response);
+                            Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                            i.putExtra("correo", response);
+                            startActivity(i);
+                            LoginActivity.this.finishAffinity();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", error.toString());
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("correo", u);
+                params.put("psw", p);
+
+                return params;
+            }
+        };
+        queue.add(postRequest);
     }
 }

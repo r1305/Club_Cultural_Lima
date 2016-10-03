@@ -10,7 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
+import android.telephony.gsm.SmsManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +24,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.julian.clubculturallima.Utils.SessionManager;
-import com.facebook.login.LoginManager;
 import com.squareup.picasso.Picasso;
 
 import org.json.simple.JSONObject;
@@ -68,10 +67,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         /* Validar si existe sesión*/
         session = new SessionManager(getApplicationContext());
         session.checkLogin();
-        HashMap<String,String> user=session.getUserDetails();
-        getDatos(user.get(SessionManager.KEY_EMAIL));
-
-
+        if(session.isLoggedIn()){
+            HashMap<String,String> user=session.getUserDetails();
+            getDatos(user.get(SessionManager.KEY_EMAIL));
+            Fragment frag1 = RecoFragment.newInstance();
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(R.id.flaContenido, frag1);
+            ft.commit();
+        }
 
         //toolbar.setNavigationIcon(R.drawable.menu);
         setSupportActionBar(toolbar);
@@ -103,11 +106,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         dl.setDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
-        Fragment frag1 = RecoFragment.newInstance();
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.flaContenido, frag1);
-        ft.commit();
-
         nav.setNavigationItemSelectedListener(this);
 
 
@@ -120,7 +118,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch(item.getItemId()){
             case R.id.logout:
                 session.logoutUser();
-                LoginManager.getInstance().logOut();
                 return true;
             case R.id.reco:
                 Fragment reco=RecoFragment.newInstance();
@@ -146,8 +143,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 dl.closeDrawers();
                 Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
                 return true;
+
+            case R.id.sms:
+                //Fragment libros=ActivitiesFragment.newInstance();
+                //ft.replace(R.id.flaContenido,libros);
+                //toolbar.setTitle("Actividades");
+                //ft.commit();
+                sendSMS("984974486", "Enviando SMS de prueba para tesis");
+                sendSMS("956087040","Enviando SMS de prueba para tesis");
+                dl.closeDrawers();
+                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
+                return true;
         }
         return false;
+    }
+
+    private void sendSMS(String phoneNumber, String message) {
+        SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage(phoneNumber, null, message, null, null);
     }
 
     public void getDatos(final String u) {
@@ -161,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onResponse(String response) {
                         // response
-                        System.out.println("***** "+response+" ****");
+                        //System.out.println("***** "+response+" ****");
                         JSONParser p=new JSONParser();
                         try{
                             JSONObject o=(JSONObject)p.parse(response);

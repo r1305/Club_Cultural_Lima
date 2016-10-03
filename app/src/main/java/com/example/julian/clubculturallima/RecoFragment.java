@@ -33,6 +33,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -153,7 +154,8 @@ public class RecoFragment extends Fragment {
                             pDialog.dismiss();
 
                         } catch (ParseException e) {
-                            Toast.makeText(getActivity(),e.toString(), Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getActivity(),e.toString(), Toast.LENGTH_SHORT).show();
+                            System.out.println("RecoFragment Error: "+e.toString());
                             e.printStackTrace();
                             pDialog.dismiss();
                         }
@@ -164,7 +166,7 @@ public class RecoFragment extends Fragment {
                     public void onErrorResponse(VolleyError error) {
                         // error
                         Log.d("Error.Response", error.toString());
-                        Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
                         pDialog.dismiss();
                     }
                 }

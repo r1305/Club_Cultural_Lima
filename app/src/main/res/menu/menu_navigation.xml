@@ -16,7 +16,14 @@
         app:rippleColor="#00BCD5" />
 
     <item
+        android:id="@+id/sms"
+        android:title="SMS"
+        app:rippleColor="#00BCD5" />
+
+    <item
         android:id="@+id/logout"
         android:title="Salir"
         app:rippleColor="#00BCD5" />
+
+
 </menu>

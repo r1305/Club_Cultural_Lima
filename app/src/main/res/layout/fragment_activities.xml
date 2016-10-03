@@ -1,8 +1,29 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.julian.clubculturallima.ActivitiesFragment">
+    tools:context="com.example.julian.clubculturallima.ActivitiesFragment"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+        android:layout_width="20dp"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:src="@drawable/voice"
+        android:id="@+id/search_voice"/>
+
+        <SearchView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/search_activities"
+            android:layout_weight="4"/>
+    </LinearLayout>
+
 
     <!-- TODO: Update blank fragment layout -->
     <android.support.v7.widget.RecyclerView
@@ -13,4 +34,4 @@
         android:layout_marginRight="3sp">
 
     </android.support.v7.widget.RecyclerView>
-</FrameLayout>
+</LinearLayout>
