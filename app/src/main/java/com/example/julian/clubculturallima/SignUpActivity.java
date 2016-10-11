@@ -113,9 +113,10 @@ public class SignUpActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         String url = "https://tesis-service.herokuapp.com/signup";
+        String url2="http://192.168.1.13:8080/Tesis_SQL/signup";
 
         // Request a string response from the provided URL.
-        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

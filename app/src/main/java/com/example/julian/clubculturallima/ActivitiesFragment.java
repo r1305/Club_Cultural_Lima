@@ -3,9 +3,14 @@ package com.example.julian.clubculturallima;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
@@ -26,6 +31,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.julian.clubculturallima.Utils.SessionManager;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -35,7 +43,11 @@ import org.json.simple.parser.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+
+import static android.app.Activity.RESULT_OK;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 
 public class ActivitiesFragment extends Fragment{
@@ -49,6 +61,9 @@ public class ActivitiesFragment extends Fragment{
     RecyclerView activity;
     ActivityRecyclerAdapter adapter;
     List<JSONObject> l=new ArrayList<>();
+
+    private GoogleApiClient client;
+    private static final int VOICE_RECOGNITION_REQUEST_CODE = 0;
 
     public ActivitiesFragment() {
         // Required empty public constructor
@@ -67,6 +82,7 @@ public class ActivitiesFragment extends Fragment{
         session=new SessionManager(getActivity().getApplicationContext());
         HashMap<String,String> datos=session.getUserDetails();
         idU=datos.get(SessionManager.KEY_EMAIL);
+
     }
 
     @Override
@@ -74,6 +90,7 @@ public class ActivitiesFragment extends Fragment{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_activities, container, false);
+        client = new GoogleApiClient.Builder(getActivity()).addApi(AppIndex.API).build();
         activity=(RecyclerView)view.findViewById(R.id.recycler_view_activities);
         activity.setLayoutManager(new LinearLayoutManager(getActivity()));
         search=(SearchView)view.findViewById(R.id.search_activities);
@@ -122,6 +139,7 @@ public class ActivitiesFragment extends Fragment{
         voice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                promptSpeechInput();
                 Toast.makeText(getActivity(), "Grabando voz", Toast.LENGTH_SHORT).show();
             }
         });
@@ -167,8 +185,8 @@ public class ActivitiesFragment extends Fragment{
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = "https://tesis-service.herokuapp.com/getActivities";
-        String url2 = "http://192.168.1.13:8080/TesisWs/getActivities";
-        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+        String url2 = "http://192.168.1.13:8080/Tesis_SQL/getActivities";
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -183,11 +201,10 @@ public class ActivitiesFragment extends Fragment{
                                 l.add((JSONObject)ja.get(i));
                             }
                             adapter.notifyDataSetChanged();
-
                             pDialog.dismiss();
 
-                        } catch (ParseException e) {
-                            Toast.makeText(getActivity(),e.toString(), Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            Toast.makeText(getActivity(),"Intente luego", Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
                             pDialog.dismiss();
                         }
@@ -210,8 +227,8 @@ public class ActivitiesFragment extends Fragment{
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = "https://tesis-service.herokuapp.com/searchActivity";
-        String url2 = "http://192.168.1.15:8080/TesisWs/searchActivity";
-        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+        String url2 = "http://192.168.1.13:8080/Tesis_SQL/searchActivity";
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -258,6 +275,55 @@ public class ActivitiesFragment extends Fragment{
             }
         };
         queue.add(postRequest);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW,
+                "Main Page",
+                Uri.parse("http://host/path"),
+                Uri.parse("android-app://com.example.julian.clubculturallima/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+
+    private void promptSpeechInput() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
+                "Diga algo...");
+        try {
+            startActivityForResult(intent,VOICE_RECOGNITION_REQUEST_CODE);
+        } catch (ActivityNotFoundException a) {
+            Toast.makeText(getApplicationContext(),
+                    "Algo falló",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case VOICE_RECOGNITION_REQUEST_CODE: {
+                if (resultCode == RESULT_OK && null != data) {
+
+                    ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    String texto=result.get(0).toString();
+                    searchActivities(texto);
+                    Toast.makeText(getActivity(),texto,Toast.LENGTH_LONG).show();
+                }
+                break;
+            }
+
+        }
     }
 
 }

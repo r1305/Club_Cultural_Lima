@@ -199,6 +199,7 @@ public class LoginActivity extends AppCompatActivity {
         final RequestQueue queue = Volley.newRequestQueue(this);
 
         String url = "https://tesis-service.herokuapp.com/login";
+        String url2="http://192.168.1.13:8080/Tesis_SQL/login";
 
         // Request a string response from the provided URL.
 
