@@ -115,10 +115,11 @@ public class DetailActivityFragment extends Fragment {
 
         String url = "https://tesis-service.herokuapp.com/puntuar";
         String url2 = "http://192.168.1.13:8080/Tesis_SQL/puntuar";
+        String url3="http://54.227.36.192:8080/Tesis_SQL/puntuar";
 
         // Request a string response from the provided URL.
 
-        final StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
+        final StringRequest postRequest = new StringRequest(Request.Method.POST, url3,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

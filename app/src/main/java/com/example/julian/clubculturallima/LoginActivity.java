@@ -131,10 +131,11 @@ public class LoginActivity extends AppCompatActivity {
 
         String url = "https://tesis-service.herokuapp.com/validar";
         String url2="http://192.168.1.13:8080/Tesis_SQL/validar";
+        String url3="http://54.227.36.192:8080/Tesis_SQL/validar";
 
         // Request a string response from the provided URL.
 
-        final StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
+        final StringRequest postRequest = new StringRequest(Request.Method.POST, url3,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -201,10 +202,11 @@ public class LoginActivity extends AppCompatActivity {
 
         String url = "https://tesis-service.herokuapp.com/login";
         String url2="http://192.168.1.13:8080/Tesis_SQL/login";
+        String url3="http://54.227.36.192:8080/Tesis_SQL/login";
 
         // Request a string response from the provided URL.
 
-        final StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
+        final StringRequest postRequest = new StringRequest(Request.Method.POST, url3,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
