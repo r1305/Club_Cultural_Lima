@@ -70,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions("user_friends");
+        loginButton.setReadPermissions("public_profile");
 
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -130,12 +130,12 @@ public class LoginActivity extends AppCompatActivity {
         final RequestQueue queue = Volley.newRequestQueue(this);
 
         String url = "https://tesis-service.herokuapp.com/validar";
-        String url2="http://192.168.1.13:8080/Tesis_SQL/validar";
+        String url2="http://192.168.1.14:8080/Tesis_SQL/validar";
         String url3="http://54.227.36.192:8080/Tesis_SQL/validar";
 
         // Request a string response from the provided URL.
 
-        final StringRequest postRequest = new StringRequest(Request.Method.POST, url3,
+        final StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -201,12 +201,12 @@ public class LoginActivity extends AppCompatActivity {
         final RequestQueue queue = Volley.newRequestQueue(this);
 
         String url = "https://tesis-service.herokuapp.com/login";
-        String url2="http://192.168.1.13:8080/Tesis_SQL/login";
+        String url2="http://192.168.1.14:8080/Tesis_SQL/login";
         String url3="http://54.227.36.192:8080/Tesis_SQL/login";
 
         // Request a string response from the provided URL.
 
-        final StringRequest postRequest = new StringRequest(Request.Method.POST, url3,
+        final StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

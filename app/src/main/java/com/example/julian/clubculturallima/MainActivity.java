@@ -149,8 +149,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //ft.replace(R.id.flaContenido,libros);
                 //toolbar.setTitle("Actividades");
                 //ft.commit();
-                sendSMS("984974486", "Enviando SMS de prueba para tesis");
-                sendSMS("956087040","Enviando SMS de prueba para tesis");
+                sendSMS("980858922", "Enviando SMS de prueba para tesis");
                 dl.closeDrawers();
                 Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
                 return true;
@@ -167,11 +166,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final RequestQueue queue = Volley.newRequestQueue(this);
 
         String url = "https://tesis-service.herokuapp.com/Usuario";
-        String url2="http://192.168.1.13:8080/Tesis_SQL/Usuario";
+        String url2="http://192.168.1.14:8080/Tesis_SQL/Usuario";
         String url3="http://54.227.36.192:8080/Tesis_SQL/Usuario";
 
         // Request a string response from the provided URL.
-        final StringRequest postRequest = new StringRequest(Request.Method.POST, url3,
+        final StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

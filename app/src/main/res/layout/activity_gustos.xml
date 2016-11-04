@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/colorPrimaryDark"
+        android:gravity="center"
+        android:text="Gustos y Preferencias"
+        android:textColor="#000000"
+        android:textSize="30dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:layout_marginStart="20dp">
+
+        <CheckBox
+            android:id="@+id/futbol"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fútbol"
+            android:textSize="25dp"
+            android:layout_marginBottom="5dp"/>
+
+        <CheckBox
+            android:id="@+id/voley"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Vóley"
+            android:textSize="25dp"
+            android:layout_marginBottom="5dp"/>
+
+        <CheckBox
+            android:id="@+id/tenis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tenis"
+            android:textSize="25dp"
+            android:layout_marginBottom="5dp"/>
+
+        <CheckBox
+            android:id="@+id/basket"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Básket"
+            android:textSize="25dp"
+            android:layout_marginBottom="5dp"/>
+
+        <CheckBox
+            android:id="@+id/fulbito"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fulbito"
+            android:textSize="25dp"
+            android:layout_marginBottom="5dp"/>
+
+        <CheckBox
+            android:id="@+id/natacion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Natación"
+            android:textSize="25dp"
+            android:layout_marginBottom="5dp"/>
+
+        <CheckBox
+            android:id="@+id/fronton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Frontón"
+            android:textSize="25dp"
+            android:layout_marginBottom="5dp"/>
+
+        <CheckBox
+            android:id="@+id/gimnasia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Gimnasia"
+            android:textSize="25dp"
+            android:layout_marginBottom="5dp"/>
+
+        <CheckBox
+            android:id="@+id/niños"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Niños"
+            android:textSize="25dp"
+            android:layout_marginBottom="5dp"/>
+
+        <CheckBox
+            android:id="@+id/adultos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Adultos"
+            android:textSize="25dp"
+            android:layout_marginBottom="5dp"/>
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_gustos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="@color/colorPrimaryDark"
+        android:gravity="center"
+        android:text="Guardar"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp" />
+
+</LinearLayout>

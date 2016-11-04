@@ -113,18 +113,18 @@ public class SignUpActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         String url = "https://tesis-service.herokuapp.com/signup";
-        String url2="http://192.168.1.13:8080/Tesis_SQL/signup";
+        String url2="http://192.168.1.14:8080/Tesis_SQL/signup";
         String url3="http://54.227.36.192:8080/Tesis_SQL/signup";
 
         // Request a string response from the provided URL.
-        StringRequest postRequest = new StringRequest(Request.Method.POST, url3,
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         // response
                         if (response.toString().equals("ok")) {
-                            Toast.makeText(SignUpActivity.this, "Registro correcto", Toast.LENGTH_SHORT).show();
-                            Intent i = new Intent(SignUpActivity.this, MainActivity.class);
+                            //Toast.makeText(SignUpActivity.this, "Registro correcto", Toast.LENGTH_SHORT).show();
+                            Intent i = new Intent(SignUpActivity.this, GustosActivity.class);
                             session.createLoginSession(correo);
                             startActivity(i);
                             SignUpActivity.this.finish();
