@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        nav.setCheckedItem(item.getItemId());
+
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         switch(item.getItemId()){
             case R.id.logout:
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 toolbar.setTitle("Recomendaciones");
                 ft.commit();
                 dl.closeDrawers();
-                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.perfil:
                 Fragment perfil=ProfileFragment.newInstance(datos);
@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 toolbar.setTitle("Perfil");
                 ft.commit();
                 dl.closeDrawers();
-                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.act:
                 Fragment libros=ActivitiesFragment.newInstance();
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 toolbar.setTitle("Actividades");
                 ft.commit();
                 dl.closeDrawers();
-                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
                 return true;
 
             case R.id.sms:
@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //ft.commit();
                 sendSMS("980858922", "Enviando SMS de prueba para tesis");
                 dl.closeDrawers();
-                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
                 return true;
         }
         return false;
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String url3="http://54.227.36.192:8080/Tesis_SQL/Usuario";
 
         // Request a string response from the provided URL.
-        final StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
+        final StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

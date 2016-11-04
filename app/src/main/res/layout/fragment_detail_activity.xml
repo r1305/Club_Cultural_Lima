@@ -147,5 +147,15 @@
         android:layout_marginTop="5dp"
         android:background="@color/colorPrimary"/>
 
+    <Button
+        android:id="@+id/btn_sms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Invitar"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/colorPrimary"/>
+
 
 </LinearLayout>

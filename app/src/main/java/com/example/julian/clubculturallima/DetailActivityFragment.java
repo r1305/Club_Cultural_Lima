@@ -4,9 +4,15 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Contacts;
+import android.provider.ContactsContract;
+import android.telephony.gsm.SmsManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +42,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static android.app.Activity.RESULT_OK;
+import static android.content.ContentValues.TAG;
+
 
 public class DetailActivityFragment extends Fragment {
 
@@ -44,9 +53,12 @@ public class DetailActivityFragment extends Fragment {
     TextView nombre, fecha, capacidad;
     RatingBar puntuacion;
     SessionManager session;
-    Button asistir;
+    Button asistir,sms;
     String u;
     String idAct;
+    String evento;
+    String dia;
+    private static final int RESULT_PICK_CONTACT = 1;
 
 
     public DetailActivityFragment() {
@@ -78,6 +90,7 @@ public class DetailActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_detail_activity, container, false);
+        sms=(Button)v.findViewById(R.id.btn_sms);
         nombre = (TextView) v.findViewById(R.id.detail_nombre);
         fecha = (TextView) v.findViewById(R.id.detail_fecha);
         capacidad = (TextView) v.findViewById(R.id.detail_capacidad);
@@ -85,12 +98,23 @@ public class DetailActivityFragment extends Fragment {
         asistir=(Button)v.findViewById(R.id.btn_asistir);
         JSONParser p = new JSONParser();
 
+        sms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
+                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+                startActivityForResult(contactPickerIntent, RESULT_PICK_CONTACT);
+            }
+        });
+
+
 
         try {
             final JSONObject o = (JSONObject) p.parse(mParam1);
             idAct=o.get("id").toString();
-
+            evento=o.get("nombre").toString();
             nombre.setText(o.get("nombre").toString());
+            dia=o.get("fecha").toString();
             fecha.setText(o.get("fecha").toString());
             capacidad.setText(o.get("capacidad").toString());
             puntuacion.setNumStars(5);
@@ -127,6 +151,47 @@ public class DetailActivityFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            // Check for the request code, we might be usign multiple startActivityForReslut
+            switch (requestCode) {
+                case RESULT_PICK_CONTACT:
+                    Cursor cursor = null;
+                    try {
+                        String phoneNo = null ;
+                        String name = null;
+                        Uri uri = data.getData();
+                        cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
+                        cursor.moveToFirst();
+                        int  phoneIndex =cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                        int n=cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+                        phoneNo = cursor.getString(phoneIndex);
+                        name=cursor.getString(n);
+                        cursor.close();
+                        String[] name2=name.split(" ");
+                        Toast.makeText(getActivity(),name2[0]+"! Ven y participa del evento "+evento
+                                +" a realizarse el "+dia, Toast.LENGTH_LONG).show();
+                        sendSMS(phoneNo, name2[0]+"! Ven y participa del evento "+evento+" a realizarse el "+dia);
+                        System.out.println(name2[0]+"! Ven y participa del evento "+evento
+                                +" a realizarse el "+dia+". Te esperamos!");
+                        //textView2.setText(phoneNo);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+            }
+        } else {
+            Log.e("MainActivity", "Failed to pick contact");
+        }
+    }
+
+    private void sendSMS(String phoneNumber, String message) {
+        SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage(phoneNumber, null, message, null, null);
+    }
+
     String rpta;
 
     public AlertDialog createRadioListDialog(final String user, final String act) {
@@ -139,16 +204,16 @@ public class DetailActivityFragment extends Fragment {
         items[2] = "Casi nada";
         items[3] = "Nada";
 
-
+        rpta=items[0].toString();
         builder.setTitle("¿Le gustó la recomendación?")
                 .setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(
-                                getActivity(),
-                                "Seleccionaste: " + items[which],
-                                Toast.LENGTH_SHORT)
-                                .show();
+//                        Toast.makeText(
+//                                getActivity(),
+//                                "Seleccionaste: " + items[which],
+//                                Toast.LENGTH_SHORT)
+//                                .show();
                         rpta = items[which].toString();
 
                     }
@@ -173,7 +238,7 @@ public class DetailActivityFragment extends Fragment {
 
         // Request a string response from the provided URL.
 
-        final StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
+        final StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -216,17 +281,18 @@ public class DetailActivityFragment extends Fragment {
 
         // Request a string response from the provided URL.
 
-        final StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
+        final StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         // response
-                        if (response.equals("true")) {
-                            Toast.makeText(getActivity(), "Puntuación registrada", Toast.LENGTH_SHORT).show();
+
+//                            Toast.makeText(getActivity(), "Puntuación registrada", Toast.LENGTH_SHORT).show();
+                            FragmentTransaction ft = getFragmentManager().beginTransaction();
+                            Fragment reco=RecoFragment.newInstance();
+                            ft.replace(R.id.flaContenido,reco);
+                            ft.commit();
                             //showRadioButtonDialog();
-                        } else {
-                            Toast.makeText(getActivity(), "Ocurrió un error", Toast.LENGTH_SHORT).show();
-                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -259,7 +325,7 @@ public class DetailActivityFragment extends Fragment {
 
         // Request a string response from the provided URL.
 
-        final StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
+        final StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

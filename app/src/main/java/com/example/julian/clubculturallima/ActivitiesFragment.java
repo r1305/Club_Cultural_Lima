@@ -187,7 +187,7 @@ public class ActivitiesFragment extends Fragment{
         String url = "https://tesis-service.herokuapp.com/getActivities";
         String url2 = "http://192.168.1.14:8080/Tesis_SQL/getActivities";
         String url3="http://54.227.36.192:8080/Tesis_SQL/getActivities";
-        StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -231,7 +231,7 @@ public class ActivitiesFragment extends Fragment{
         String url = "https://tesis-service.herokuapp.com/searchActivity";
         String url2 = "http://192.168.1.14:8080/Tesis_SQL/searchActivity";
         String url3="http://54.227.36.192:8080/Tesis_SQL/searchActivity";
-        StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
