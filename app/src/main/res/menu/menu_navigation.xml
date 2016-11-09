@@ -15,10 +15,10 @@
         android:title="Perfil"
         app:rippleColor="#00BCD5" />
 
-    <item
-        android:id="@+id/sms"
-        android:title="SMS"
-        app:rippleColor="#00BCD5" />
+    <!--<item-->
+        <!--android:id="@+id/sms"-->
+        <!--android:title="SMS"-->
+        <!--app:rippleColor="#00BCD5" />-->
 
     <item
         android:id="@+id/logout"

@@ -171,11 +171,11 @@ public class DetailActivityFragment extends Fragment {
                         name=cursor.getString(n);
                         cursor.close();
                         String[] name2=name.split(" ");
-                        Toast.makeText(getActivity(),name2[0]+"! Ven y participa del evento "+evento
-                                +" a realizarse el "+dia, Toast.LENGTH_LONG).show();
-                        sendSMS(phoneNo, name2[0]+"! Ven y participa del evento "+evento+" a realizarse el "+dia);
-                        System.out.println(name2[0]+"! Ven y participa del evento "+evento
-                                +" a realizarse el "+dia+". Te esperamos!");
+                        Toast.makeText(getActivity(),"Mensaje enviado", Toast.LENGTH_LONG).show();
+                        String cadena="¡Ven y participa del evento "+evento+" a realizarse el "+dia+"!";
+                        sendSMS(phoneNo, cadena);
+//                        System.out.println(name2[0]+"! Ven y participa del evento "+evento
+//                                +" a realizarse el "+dia+". Te esperamos!");
                         //textView2.setText(phoneNo);
                     } catch (Exception e) {
                         e.printStackTrace();

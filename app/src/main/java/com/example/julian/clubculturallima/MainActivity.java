@@ -2,6 +2,8 @@ package com.example.julian.clubculturallima;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -144,23 +146,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
                 return true;
 
-            case R.id.sms:
-                //Fragment libros=ActivitiesFragment.newInstance();
-                //ft.replace(R.id.flaContenido,libros);
-                //toolbar.setTitle("Actividades");
-                //ft.commit();
-                sendSMS("980858922", "Enviando SMS de prueba para tesis");
-                dl.closeDrawers();
-//                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
-                return true;
+//            case R.id.sms:
+//                //Fragment libros=ActivitiesFragment.newInstance();
+//                //ft.replace(R.id.flaContenido,libros);
+//                //toolbar.setTitle("Actividades");
+//                //ft.commit();
+//                //sendSMS("980858922", "Enviando SMS de prueba para tesis");
+//                sendEmail();
+//                dl.closeDrawers();
+////                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
+//                return true;
         }
         return false;
     }
 
-    private void sendSMS(String phoneNumber, String message) {
-        SmsManager sms = SmsManager.getDefault();
-        sms.sendTextMessage(phoneNumber, null, message, null, null);
-    }
+//    private void sendSMS(String phoneNumber, String message) {
+//        SmsManager sms = SmsManager.getDefault();
+//        sms.sendTextMessage(phoneNumber, null, message, null, null);
+//    }
+//
+//    private void sendEmail(){
+//
+//        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+//        emailIntent.setData(Uri.parse("mailto:" + "20111403@aloe.ulima.edu.pe"));
+//        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Probando");
+//        emailIntent.putExtra(Intent.EXTRA_TEXT, "My email's body");
+//
+//        try {
+//            startActivity(Intent.createChooser(emailIntent, "Send email using..."));
+//        } catch (android.content.ActivityNotFoundException ex) {
+//            Toast.makeText(MainActivity.this, "No email clients installed.", Toast.LENGTH_SHORT).show();
+//        }
+//
+//    }
 
     public void getDatos(final String u) {
         final RequestQueue queue = Volley.newRequestQueue(this);

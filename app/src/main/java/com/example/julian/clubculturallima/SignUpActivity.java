@@ -42,13 +42,14 @@ import java.util.Map;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    EditText nombre, edad, email, clave;
-    Button signup;
+    EditText nombre, edad, email, clave,codigo;
+    Button signup,val;
     ImageView img;
     String urlImg;
     int PICK_IMAGE = 200;
     Context c = this;
     SessionManager session;
+    ProgressDialog pDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +62,11 @@ public class SignUpActivity extends AppCompatActivity {
         clave = (EditText) findViewById(R.id.sign_psw);
         signup = (Button) findViewById(R.id.sign_btn);
         img = (ImageView) findViewById(R.id.sign_img);
+        codigo=(EditText)findViewById(R.id.sign_codigo);
+        val=(Button)findViewById(R.id.sign_btn_validar);
 
         session = new SessionManager(c);
+        img.setVisibility(View.GONE);
         img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,10 +74,43 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
+        signup.setVisibility(View.GONE);
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                pDialog = new ProgressDialog(SignUpActivity.this);
+
+                String message = "Espere un momento...";
+
+                SpannableString ss2 = new SpannableString(message);
+                ss2.setSpan(new RelativeSizeSpan(1f), 0, ss2.length(), 0);
+                ss2.setSpan(new ForegroundColorSpan(Color.BLACK), 0, ss2.length(), 0);
+
+                pDialog.setMessage(ss2);
+
+                pDialog.setCancelable(false);
+                pDialog.show();
+                validar(codigo.getText().toString());
                 signup(nombre.getText().toString(),edad.getText().toString(),urlImg,email.getText().toString(),clave.getText().toString());
+            }
+        });
+
+        val.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pDialog = new ProgressDialog(SignUpActivity.this);
+
+                String message = "Validando...";
+
+                SpannableString ss2 = new SpannableString(message);
+                ss2.setSpan(new RelativeSizeSpan(1f), 0, ss2.length(), 0);
+                ss2.setSpan(new ForegroundColorSpan(Color.BLACK), 0, ss2.length(), 0);
+
+                pDialog.setMessage(ss2);
+
+                pDialog.setCancelable(false);
+                pDialog.show();
+                validar(codigo.getText().toString());
             }
         });
     }
@@ -124,11 +161,13 @@ public class SignUpActivity extends AppCompatActivity {
                         // response
                         if (response.toString().equals("ok")) {
                             //Toast.makeText(SignUpActivity.this, "Registro correcto", Toast.LENGTH_SHORT).show();
+                            pDialog.dismiss();
                             Intent i = new Intent(SignUpActivity.this, GustosActivity.class);
                             session.createLoginSession(correo);
                             startActivity(i);
                             SignUpActivity.this.finish();
                         } else {
+                            pDialog.dismiss();
                             Toast.makeText(SignUpActivity.this, "¡El correo ya existe!", Toast.LENGTH_SHORT).show();
                             email.setTextColor(Color.RED);
                             email.setError("Correo ya usado");
@@ -155,6 +194,55 @@ public class SignUpActivity extends AppCompatActivity {
                 params.put("correo", correo);
                 params.put("psw", psw);
 
+                return params;
+            }
+        };
+        queue.add(postRequest);
+    }
+
+    public void validar(final String cod) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "https://tesis-service.herokuapp.com/validarCodigo";
+        String url2="http://192.168.1.14:8080/Tesis_SQL/validarCodigo";
+        String url3="http://54.227.36.192:8080/Tesis_SQL/validarCodigo";
+
+        // Request a string response from the provided URL.
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        if (response.toString().equals("true")) {
+                            pDialog.dismiss();
+                            //Toast.makeText(SignUpActivity.this, "Código correcto", Toast.LENGTH_SHORT).show();
+                            codigo.setEnabled(false);
+                            codigo.setFocusable(false);
+                            nombre.setFocusable(true);
+                            val.setVisibility(View.GONE);
+                            nombre.setVisibility(View.VISIBLE);
+                            edad.setVisibility(View.VISIBLE);
+                            email.setVisibility(View.VISIBLE);
+                            clave.setVisibility(View.VISIBLE);
+                            img.setVisibility(View.VISIBLE);
+
+
+                        } else {
+                            Toast.makeText(SignUpActivity.this, "Código incorrecto", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Toast.makeText(SignUpActivity.this, "Error: " + error, Toast.LENGTH_LONG).show();
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("codigo", cod);
                 return params;
             }
         };
@@ -200,7 +288,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public class Upload extends AsyncTask<String, Void, String> {
-        ProgressDialog pDialog;
+
         Map u;
 
         @Override
@@ -250,6 +338,7 @@ public class SignUpActivity extends AppCompatActivity {
             pDialog.dismiss();
             img.setVisibility(View.VISIBLE);
             urlImg = u.get("url").toString();
+            signup.setVisibility(View.VISIBLE);
             //System.out.println(u.get("url"));
         }
     }
