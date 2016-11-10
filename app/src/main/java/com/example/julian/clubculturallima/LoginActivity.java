@@ -213,7 +213,6 @@ public class LoginActivity extends AppCompatActivity {
                         // response
                         if (response.equals("error")) {
                             Toast.makeText(LoginActivity.this, "¡Usuario o contraseña incorrecta!", Toast.LENGTH_SHORT).show();
-
                         } else {
                             session.createLoginSession(response);
                             Intent i = new Intent(LoginActivity.this, MainActivity.class);

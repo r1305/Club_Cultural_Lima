@@ -120,6 +120,7 @@ public class DetailActivityFragment extends Fragment {
             puntuacion.setNumStars(5);
             puntuacion.setMax(5);
             puntuacion.setRating(Float.parseFloat(o.get("puntaje").toString()));
+
             puntuacion.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
                 @Override
                 public void onRatingChanged(RatingBar ratingBar, final float v, boolean b) {
@@ -136,6 +137,8 @@ public class DetailActivityFragment extends Fragment {
                             .show();
 
                 }
+
+
             });
         } catch (ParseException e) {
             e.printStackTrace();

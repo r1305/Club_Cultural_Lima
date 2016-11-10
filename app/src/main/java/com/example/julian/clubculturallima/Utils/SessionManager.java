@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 import com.example.julian.clubculturallima.LoginActivity;
+import com.example.julian.clubculturallima.MainActivity;
 
 import java.util.HashMap;
 

@@ -227,6 +227,7 @@ public class SignUpActivity extends AppCompatActivity {
 
 
                         } else {
+                            pDialog.dismiss();
                             Toast.makeText(SignUpActivity.this, "Código incorrecto", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -235,6 +236,7 @@ public class SignUpActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // error
+                        pDialog.dismiss();
                         Toast.makeText(SignUpActivity.this, "Error: " + error, Toast.LENGTH_LONG).show();
                     }
                 }
@@ -341,5 +343,14 @@ public class SignUpActivity extends AppCompatActivity {
             signup.setVisibility(View.VISIBLE);
             //System.out.println(u.get("url"));
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent i=new Intent(SignUpActivity.this,LoginActivity.class);
+        startActivity(i);
+        SignUpActivity.this.finish();
+
     }
 }

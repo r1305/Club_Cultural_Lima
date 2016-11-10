@@ -2,8 +2,6 @@ package com.example.julian.clubculturallima;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -12,12 +10,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.telephony.gsm.SmsManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -26,6 +22,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.julian.clubculturallima.Utils.SessionManager;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
 import com.squareup.picasso.Picasso;
 
 import org.json.simple.JSONObject;
@@ -35,6 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -50,12 +50,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     CircleImageView img;
     SessionManager session;
     String datos;
+    CallbackManager callbackManager;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         setContentView(R.layout.activity_main);
 
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         img=(CircleImageView)v.findViewById(R.id.profile);
 
         /* Validar si existe sesión*/
-        session = new SessionManager(getApplicationContext());
+        session = new SessionManager(this);
         session.checkLogin();
         if(session.isLoggedIn()){
             HashMap<String,String> user=session.getUserDetails();
@@ -119,7 +121,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         switch(item.getItemId()){
             case R.id.logout:
+                MainActivity.this.finish();
                 session.logoutUser();
+                LoginManager.getInstance().logOut();
+
                 return true;
             case R.id.reco:
                 Fragment reco=RecoFragment.newInstance();
@@ -158,6 +163,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                return true;
         }
         return false;
+    }
+
+    protected void facebookSDKInitialize() {
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
     }
 
 //    private void sendSMS(String phoneNumber, String message) {

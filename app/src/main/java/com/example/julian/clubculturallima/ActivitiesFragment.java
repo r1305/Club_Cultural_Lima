@@ -79,7 +79,7 @@ public class ActivitiesFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        session=new SessionManager(getActivity().getApplicationContext());
+        session=new SessionManager(getActivity());
         HashMap<String,String> datos=session.getUserDetails();
         idU=datos.get(SessionManager.KEY_EMAIL);
 
