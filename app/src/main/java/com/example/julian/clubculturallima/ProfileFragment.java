@@ -80,14 +80,6 @@ public class ProfileFragment extends Fragment {
         imgP=(CircleImageView)v.findViewById(R.id.imgPerfil);
         name=(EditText)v.findViewById(R.id.nombre);
         edad=(EditText)v.findViewById(R.id.edad);
-//        btn_edit=(ImageView) v.findViewById(R.id.edit);
-
-//        btn_edit.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(getActivity(), "Editar perfil", Toast.LENGTH_SHORT).show();
-//            }
-//        });
 
         try{
             JSONParser p=new JSONParser();

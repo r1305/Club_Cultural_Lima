@@ -97,10 +97,10 @@ public class GustosActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "https://tesis-service.herokuapp.com/gustos";
         String url2 = "http://192.168.1.14:8080/Tesis_SQL/gustos";
-        String url3 = "http://54.227.36.192:8080/Tesis_SQL/gustos";
+        String url3 = "http://54.146.224.244:8080/Tesis_SQL/gustos";
 
         // Request a string response from the provided URL.
-        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url3,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

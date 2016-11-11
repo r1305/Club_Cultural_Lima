@@ -164,22 +164,15 @@ public class DetailActivityFragment extends Fragment {
                     Cursor cursor = null;
                     try {
                         String phoneNo = null ;
-                        String name = null;
                         Uri uri = data.getData();
                         cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
                         cursor.moveToFirst();
                         int  phoneIndex =cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-                        int n=cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
                         phoneNo = cursor.getString(phoneIndex);
-                        name=cursor.getString(n);
                         cursor.close();
-                        String[] name2=name.split(" ");
                         Toast.makeText(getActivity(),"Mensaje enviado", Toast.LENGTH_LONG).show();
                         String cadena="¡Ven y participa del evento "+evento+" a realizarse el "+dia+"!";
                         sendSMS(phoneNo, cadena);
-//                        System.out.println(name2[0]+"! Ven y participa del evento "+evento
-//                                +" a realizarse el "+dia+". Te esperamos!");
-                        //textView2.setText(phoneNo);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -237,11 +230,11 @@ public class DetailActivityFragment extends Fragment {
 
         String url = "https://tesis-service.herokuapp.com/puntuar";
         String url2 = "http://192.168.1.14:8080/Tesis_SQL/puntuar";
-        String url3 = "http://54.227.36.192:8080/Tesis_SQL/puntuar";
+        String url3 = "http://54.146.224.244:8080/Tesis_SQL/puntuar";
 
         // Request a string response from the provided URL.
 
-        final StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+        final StringRequest postRequest = new StringRequest(Request.Method.POST, url3,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -280,11 +273,11 @@ public class DetailActivityFragment extends Fragment {
 
         String url = "https://tesis-service.herokuapp.com/estad";
         String url2 = "http://192.168.1.14:8080/Tesis_SQL/estad";
-        String url3 = "http://54.227.36.192:8080/Tesis_SQL/estad";
+        String url3 = "http://54.146.224.244:8080/Tesis_SQL/estad";
 
         // Request a string response from the provided URL.
 
-        final StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+        final StringRequest postRequest = new StringRequest(Request.Method.POST, url3,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -324,11 +317,11 @@ public class DetailActivityFragment extends Fragment {
 
         String url = "https://tesis-service.herokuapp.com/Asistencia";
         String url2 = "http://192.168.1.14:8080/Tesis_SQL/Asistencia";
-        String url3 = "http://54.227.36.192:8080/Tesis_SQL/Asistencia";
+        String url3 = "http://54.146.224.244:8080/Tesis_SQL/Asistencia";
 
         // Request a string response from the provided URL.
 
-        final StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+        final StringRequest postRequest = new StringRequest(Request.Method.POST, url3,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

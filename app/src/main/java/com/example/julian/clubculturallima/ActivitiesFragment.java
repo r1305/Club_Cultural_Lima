@@ -113,7 +113,7 @@ public class ActivitiesFragment extends Fragment{
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
                 pDialog = new ProgressDialog(getActivity());
                 String message = "Buscando...";
 
@@ -123,7 +123,7 @@ public class ActivitiesFragment extends Fragment{
 
                 pDialog.setMessage(ss2);
 
-                pDialog.setCancelable(true);
+                pDialog.setCancelable(false);
                 pDialog.show();
                 searchActivities(s);
                 return false;
@@ -186,8 +186,8 @@ public class ActivitiesFragment extends Fragment{
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = "https://tesis-service.herokuapp.com/getActivities";
         String url2 = "http://192.168.1.14:8080/Tesis_SQL/getActivities";
-        String url3="http://54.227.36.192:8080/Tesis_SQL/getActivities";
-        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+        String url3="http://54.146.224.244:8080/Tesis_SQL/getActivities";
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url3,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -230,8 +230,8 @@ public class ActivitiesFragment extends Fragment{
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = "https://tesis-service.herokuapp.com/searchActivity";
         String url2 = "http://192.168.1.14:8080/Tesis_SQL/searchActivity";
-        String url3="http://54.227.36.192:8080/Tesis_SQL/searchActivity";
-        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+        String url3="http://54.146.224.244:8080/Tesis_SQL/searchActivity";
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url3,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -321,7 +321,7 @@ public class ActivitiesFragment extends Fragment{
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     String texto=result.get(0).toString();
                     searchActivities(texto);
-                    Toast.makeText(getActivity(),texto,Toast.LENGTH_LONG).show();
+//                    Toast.makeText(getActivity(),texto,Toast.LENGTH_LONG).show();
                 }
                 break;
             }

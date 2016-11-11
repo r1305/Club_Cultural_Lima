@@ -38,26 +38,21 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    //@Bind(R.id.drawer_layout)
     DrawerLayout dl;
-    //@Bind(R.id.toolbar)
     Toolbar toolbar;
-    //@Bind(R.id.navigation)
     NavigationView nav;
-    //@Bind(R.id.txt_nav_header)
     TextView txt_nav;
-    //@Bind(R.id.profile)
     CircleImageView img;
     SessionManager session;
     String datos;
     CallbackManager callbackManager;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        facebookSDKInitialize();
 
         setContentView(R.layout.activity_main);
 
@@ -121,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         switch(item.getItemId()){
             case R.id.logout:
-                MainActivity.this.finish();
+                MainActivity.this.finishAffinity();
                 session.logoutUser();
                 LoginManager.getInstance().logOut();
 
@@ -150,17 +145,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 dl.closeDrawers();
 //                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
                 return true;
-
-//            case R.id.sms:
-//                //Fragment libros=ActivitiesFragment.newInstance();
-//                //ft.replace(R.id.flaContenido,libros);
-//                //toolbar.setTitle("Actividades");
-//                //ft.commit();
-//                //sendSMS("980858922", "Enviando SMS de prueba para tesis");
-//                sendEmail();
-//                dl.closeDrawers();
-////                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
-//                return true;
         }
         return false;
     }
@@ -196,10 +180,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         String url = "https://tesis-service.herokuapp.com/Usuario";
         String url2="http://192.168.1.14:8080/Tesis_SQL/Usuario";
-        String url3="http://54.227.36.192:8080/Tesis_SQL/Usuario";
+        String url3="http://54.146.224.244:8080/Tesis_SQL/Usuario";
 
         // Request a string response from the provided URL.
-        final StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+        final StringRequest postRequest = new StringRequest(Request.Method.POST, url3,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

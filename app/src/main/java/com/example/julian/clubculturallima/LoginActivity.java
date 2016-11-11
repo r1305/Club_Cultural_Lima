@@ -1,9 +1,15 @@
 package com.example.julian.clubculturallima;
 
+import android.app.Application;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +31,7 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
@@ -39,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText user, clave;
     Button login, signup;
     SessionManager session;
+    ProgressDialog pDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +64,17 @@ public class LoginActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                pDialog = new ProgressDialog(LoginActivity.this);
+                String message = "Verificando...";
+
+                SpannableString ss2 = new SpannableString(message);
+                ss2.setSpan(new RelativeSizeSpan(1f), 0, ss2.length(), 0);
+                ss2.setSpan(new ForegroundColorSpan(Color.BLACK), 0, ss2.length(), 0);
+
+                pDialog.setMessage(ss2);
+
+                pDialog.setCancelable(false);
+                pDialog.show();
                 login(user.getText().toString(),clave.getText().toString());
             }
         });
@@ -131,11 +150,11 @@ public class LoginActivity extends AppCompatActivity {
 
         String url = "https://tesis-service.herokuapp.com/validar";
         String url2="http://192.168.1.14:8080/Tesis_SQL/validar";
-        String url3="http://54.227.36.192:8080/Tesis_SQL/validar";
+        String url3="http://54.146.224.244:8080/Tesis_SQL/validar";
 
         // Request a string response from the provided URL.
 
-        final StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+        final StringRequest postRequest = new StringRequest(Request.Method.POST, url3,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -202,21 +221,22 @@ public class LoginActivity extends AppCompatActivity {
 
         String url = "https://tesis-service.herokuapp.com/login";
         String url2="http://192.168.1.14:8080/Tesis_SQL/login";
-        String url3="http://54.227.36.192:8080/Tesis_SQL/login";
+        String url3="http://54.146.224.244:8080/Tesis_SQL/login";
 
         // Request a string response from the provided URL.
 
-        final StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+        final StringRequest postRequest = new StringRequest(Request.Method.POST, url3,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         // response
                         if (response.equals("error")) {
+                            pDialog.dismiss();
                             Toast.makeText(LoginActivity.this, "¡Usuario o contraseña incorrecta!", Toast.LENGTH_SHORT).show();
                         } else {
+                            pDialog.dismiss();
                             session.createLoginSession(response);
                             Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                            i.putExtra("correo", response);
                             startActivity(i);
                             LoginActivity.this.finishAffinity();
                         }
@@ -226,6 +246,8 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // error
+                        pDialog.dismiss();
+                        Toast.makeText(LoginActivity.this, "¡Algo salió mal!", Toast.LENGTH_SHORT).show();
                         Log.d("Error.Response", error.toString());
                     }
                 }
@@ -240,5 +262,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
         queue.add(postRequest);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        System.exit(0);
     }
 }
