@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -107,7 +108,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         nav.setNavigationItemSelectedListener(this);
 
-
     }
 
     @Override
@@ -155,25 +155,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         callbackManager = CallbackManager.Factory.create();
     }
 
-//    private void sendSMS(String phoneNumber, String message) {
-//        SmsManager sms = SmsManager.getDefault();
-//        sms.sendTextMessage(phoneNumber, null, message, null, null);
-//    }
-//
-//    private void sendEmail(){
-//
-//        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-//        emailIntent.setData(Uri.parse("mailto:" + "20111403@aloe.ulima.edu.pe"));
-//        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Probando");
-//        emailIntent.putExtra(Intent.EXTRA_TEXT, "My email's body");
-//
-//        try {
-//            startActivity(Intent.createChooser(emailIntent, "Send email using..."));
-//        } catch (android.content.ActivityNotFoundException ex) {
-//            Toast.makeText(MainActivity.this, "No email clients installed.", Toast.LENGTH_SHORT).show();
-//        }
-//
-//    }
 
     public void getDatos(final String u) {
         final RequestQueue queue = Volley.newRequestQueue(this);
@@ -212,10 +193,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("correo", u);
-
                 return params;
             }
         };
+        postRequest.setRetryPolicy(
+                new DefaultRetryPolicy(50000,
+                        15,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(postRequest);
     }
 }

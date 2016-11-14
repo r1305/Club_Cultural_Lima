@@ -31,6 +31,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.cloudinary.Cloudinary;
+import com.cloudinary.Transformation;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.julian.clubculturallima.Utils.SessionManager;
 
@@ -151,10 +152,10 @@ public class SignUpActivity extends AppCompatActivity {
         final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         String url = "https://tesis-service.herokuapp.com/signup";
         String url2="http://192.168.1.14:8080/Tesis_SQL/signup";
-        String url3="http://54.227.36.192:8080/Tesis_SQL/signup";
+        String url3="http://54.146.224.244:8080/Tesis_SQL/signup";
 
         // Request a string response from the provided URL.
-        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url3,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -292,7 +293,8 @@ public class SignUpActivity extends AppCompatActivity {
     public class Upload extends AsyncTask<String, Void, String> {
 
         Map u;
-
+        String up;
+        String crop_url;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -324,8 +326,11 @@ public class SignUpActivity extends AppCompatActivity {
                 config.put("api_secret", "0K7-UMpvn21oyqDdKO-xJ_P9_t8");
 
                 Cloudinary cloudinary = new Cloudinary(config);
-
-                u = cloudinary.uploader().upload(urlImg, ObjectUtils.emptyMap());
+                Map params=ObjectUtils.asMap("width",150);
+                params.put("height",150);
+                u = cloudinary.uploader().upload(urlImg, params);
+                String public_id=u.get("public_id").toString();
+                crop_url="http://res.cloudinary.com/dsdrbqoex/image/upload/c_limit,h_150,w_150/"+public_id;
 
             } catch (Exception e) {
 
@@ -339,9 +344,8 @@ public class SignUpActivity extends AppCompatActivity {
             super.onPostExecute(s);
             pDialog.dismiss();
             img.setVisibility(View.VISIBLE);
-            urlImg = u.get("url").toString();
+            urlImg = crop_url;
             signup.setVisibility(View.VISIBLE);
-            //System.out.println(u.get("url"));
         }
     }
 

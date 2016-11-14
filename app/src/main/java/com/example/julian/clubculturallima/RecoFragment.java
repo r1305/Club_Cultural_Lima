@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -178,6 +179,10 @@ public class RecoFragment extends Fragment {
                 return params;
             }
         };
+        postRequest.setRetryPolicy(
+                new DefaultRetryPolicy(50000,
+                15,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(postRequest);
     }
 
