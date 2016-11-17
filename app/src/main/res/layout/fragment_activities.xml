@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.julian.clubculturallima.ActivitiesFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="com.example.julian.clubculturallima.ActivitiesFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,27 +11,34 @@
         android:orientation="horizontal">
 
         <ImageView
-        android:layout_width="20dp"
-        android:layout_height="50dp"
-        android:layout_weight="1"
-        android:src="@drawable/voice"
-        android:id="@+id/search_voice"/>
+            android:id="@+id/search_voice"
+            android:layout_width="20dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:src="@drawable/voice" />
 
         <SearchView
+            android:id="@+id/search_activities"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:id="@+id/search_activities"
-            android:layout_weight="4"/>
+            android:layout_weight="4" />
     </LinearLayout>
 
 
     <!-- TODO: Update blank fragment layout -->
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_activities"
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipeContainer_act"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="3sp"
-        android:layout_marginRight="3sp">
+        android:layout_height="match_parent">
 
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_activities"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3sp"
+            android:layout_marginRight="3sp">
+
+        </android.support.v7.widget.RecyclerView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

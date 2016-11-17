@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
@@ -62,6 +63,8 @@ public class ActivitiesFragment extends Fragment{
     ActivityRecyclerAdapter adapter;
     List<JSONObject> l=new ArrayList<>();
 
+    private SwipeRefreshLayout swipeContainer;
+
     private GoogleApiClient client;
     private static final int VOICE_RECOGNITION_REQUEST_CODE = 0;
 
@@ -96,6 +99,15 @@ public class ActivitiesFragment extends Fragment{
         search=(SearchView)view.findViewById(R.id.search_activities);
         voice=(ImageView)view.findViewById(R.id.search_voice); 
         adapter=new ActivityRecyclerAdapter(l);
+
+        swipeContainer = (SwipeRefreshLayout)view.findViewById(R.id.swipeContainer_act);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                getActivities();
+            }
+        });
 
         activity.setAdapter(adapter);
         adapter.setOnClickListener(new View.OnClickListener() {
@@ -192,6 +204,8 @@ public class ActivitiesFragment extends Fragment{
                     @Override
                     public void onResponse(String response) {
                         // response
+                        swipeContainer.setRefreshing(false);
+
                         System.out.println("***** " + response);
                         JSONParser jp = new JSONParser();
                         JSONObject obj;

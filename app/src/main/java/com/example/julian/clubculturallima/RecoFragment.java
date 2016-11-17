@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
@@ -51,6 +52,8 @@ public class RecoFragment extends Fragment {
     RecomendacionesRecyclerAdapter adapter;
     List<JSONObject> l=new ArrayList<>();
 
+    private SwipeRefreshLayout swipeContainer;
+
     public RecoFragment() {
         // Required empty public constructor
     }
@@ -81,6 +84,14 @@ public class RecoFragment extends Fragment {
         //getRecomendacion(idU);
         reco=(RecyclerView)view.findViewById(R.id.recycler_view_reco);
         reco.setLayoutManager(new LinearLayoutManager(getActivity()));
+        swipeContainer = (SwipeRefreshLayout)view.findViewById(R.id.swipeContainer);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                getRecomendacion(idU);
+            }
+        });
         adapter=new RecomendacionesRecyclerAdapter(l);
 
         reco.setAdapter(adapter);
@@ -137,10 +148,13 @@ public class RecoFragment extends Fragment {
         String url = "https://tesis-service.herokuapp.com/recomendacion";
         String url2 = "http://192.168.1.14:8080/Tesis_SQL/recomendacion";
         String url3="http://54.146.224.244:8080/Tesis_SQL/recomendacion";
+
+        l.clear();
         StringRequest postRequest = new StringRequest(Request.Method.POST, url3,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        swipeContainer.setRefreshing(false);
                         // response
                         System.out.println("***** " + response);
                         JSONParser jp = new JSONParser();
