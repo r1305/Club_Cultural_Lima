@@ -1,9 +1,14 @@
 package com.example.julian.clubculturallima;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -39,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText user, clave;
     Button login, signup;
     SessionManager session;
+    ProgressDialog pDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions("public_profile");
+        loginButton.setReadPermissions("public_profile,email");
 
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -107,6 +113,17 @@ public class LoginActivity extends AppCompatActivity {
                             GraphResponse response) {
                         try {
                             Utils.user.setEmail(object.getString("email"));
+                            pDialog = new ProgressDialog(LoginActivity.this);
+                            String message = "Cargando...";
+
+                            SpannableString ss2 = new SpannableString(message);
+                            ss2.setSpan(new RelativeSizeSpan(1f), 0, ss2.length(), 0);
+                            ss2.setSpan(new ForegroundColorSpan(Color.BLACK), 0, ss2.length(), 0);
+
+                            pDialog.setMessage(ss2);
+
+                            pDialog.setCancelable(true);
+                            pDialog.show();
                             validar(Utils.user.getEmail());
 
                         } catch (Exception e) {
@@ -140,6 +157,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         // response
+                        pDialog.dismiss();
                         System.out.println("***** "+response+" ****");
                         if (response.equalsIgnoreCase("fail")) {
 
@@ -159,6 +177,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // error
+                        pDialog.dismiss();
                         Log.d("Error.Response", error.toString());
                     }
                 }
