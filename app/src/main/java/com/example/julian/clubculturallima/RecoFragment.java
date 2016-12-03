@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -131,17 +132,13 @@ public class RecoFragment extends Fragment {
     }
 
     public void getRecomendacion(final String id) {
-
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = "https://tesis-service.herokuapp.com/recomendacion";
-        String url2 = "http://192.168.1.14:8080/Tesis_SQL/recomendacion";
-        String url3="http://54.227.36.192:8080/Tesis_SQL/recomendacion";
-        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+        String url2 = "http://192.168.1.15:8080/Tesis_SQL/recomendacion";
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // response
-                        System.out.println("***** " + response);
                         JSONParser jp = new JSONParser();
                         JSONObject obj;
                         try {
@@ -152,9 +149,7 @@ public class RecoFragment extends Fragment {
                             }
                             adapter.notifyDataSetChanged();
                             pDialog.dismiss();
-
                         } catch (ParseException e) {
-                            //Toast.makeText(getActivity(),e.toString(), Toast.LENGTH_SHORT).show();
                             System.out.println("RecoFragment Error: "+e.toString());
                             e.printStackTrace();
                             pDialog.dismiss();
@@ -164,9 +159,7 @@ public class RecoFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // error
                         Log.d("Error.Response", error.toString());
-                        //Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
                         pDialog.dismiss();
                     }
                 }
@@ -178,6 +171,9 @@ public class RecoFragment extends Fragment {
                 return params;
             }
         };
+        postRequest.setRetryPolicy(new DefaultRetryPolicy(5000,
+                15,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(postRequest);
     }
 

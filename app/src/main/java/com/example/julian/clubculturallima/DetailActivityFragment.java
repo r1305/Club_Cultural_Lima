@@ -236,12 +236,11 @@ public class DetailActivityFragment extends Fragment {
         final RequestQueue queue = Volley.newRequestQueue(getActivity());
 
         String url = "https://tesis-service.herokuapp.com/puntuar";
-        String url2 = "http://192.168.1.14:8080/Tesis_SQL/puntuar";
-        String url3 = "http://54.227.36.192:8080/Tesis_SQL/puntuar";
+        String url2 = "http://192.168.1.15:8080/Tesis_SQL/puntuar";
 
         // Request a string response from the provided URL.
 
-        final StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+        final StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -279,12 +278,10 @@ public class DetailActivityFragment extends Fragment {
         final RequestQueue queue = Volley.newRequestQueue(getActivity());
 
         String url = "https://tesis-service.herokuapp.com/estad";
-        String url2 = "http://192.168.1.14:8080/Tesis_SQL/estad";
-        String url3 = "http://54.227.36.192:8080/Tesis_SQL/estad";
-
+        String url2 = "http://192.168.1.15:8080/Tesis_SQL/estad";
         // Request a string response from the provided URL.
 
-        final StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+        final StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -323,12 +320,10 @@ public class DetailActivityFragment extends Fragment {
         final RequestQueue queue = Volley.newRequestQueue(getActivity());
 
         String url = "https://tesis-service.herokuapp.com/Asistencia";
-        String url2 = "http://192.168.1.14:8080/Tesis_SQL/Asistencia";
-        String url3 = "http://54.227.36.192:8080/Tesis_SQL/Asistencia";
-
+        String url2 = "http://192.168.1.15:8080/Tesis_SQL/Asistencia";
         // Request a string response from the provided URL.
 
-        final StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+        final StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

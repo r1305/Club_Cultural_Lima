@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -147,12 +148,11 @@ public class LoginActivity extends AppCompatActivity {
         final RequestQueue queue = Volley.newRequestQueue(this);
 
         String url = "https://tesis-service.herokuapp.com/validar";
-        String url2="http://192.168.1.14:8080/Tesis_SQL/validar";
-        String url3="http://54.227.36.192:8080/Tesis_SQL/validar";
+        String url2="http://192.168.1.15:8080/Tesis_SQL/validar";
 
         // Request a string response from the provided URL.
 
-        final StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+        final StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -190,6 +190,9 @@ public class LoginActivity extends AppCompatActivity {
                 return params;
             }
         };
+        postRequest.setRetryPolicy(new DefaultRetryPolicy(5000,
+                15,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(postRequest);
     }
 
@@ -220,12 +223,12 @@ public class LoginActivity extends AppCompatActivity {
         final RequestQueue queue = Volley.newRequestQueue(this);
 
         String url = "https://tesis-service.herokuapp.com/login";
-        String url2="http://192.168.1.14:8080/Tesis_SQL/login";
-        String url3="http://54.227.36.192:8080/Tesis_SQL/login";
+        String url2="http://192.168.1.15:8080/Tesis_SQL/login";
+
 
         // Request a string response from the provided URL.
 
-        final StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+        final StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -258,6 +261,9 @@ public class LoginActivity extends AppCompatActivity {
                 return params;
             }
         };
+        postRequest.setRetryPolicy(new DefaultRetryPolicy(5000,
+                15,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(postRequest);
     }
 }

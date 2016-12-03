@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -185,9 +186,8 @@ public class ActivitiesFragment extends Fragment{
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = "https://tesis-service.herokuapp.com/getActivities";
-        String url2 = "http://192.168.1.14:8080/Tesis_SQL/getActivities";
-        String url3="http://54.227.36.192:8080/Tesis_SQL/getActivities";
-        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+        String url2 = "http://192.168.1.15:8080/Tesis_SQL/getActivities";
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -222,24 +222,22 @@ public class ActivitiesFragment extends Fragment{
                     }
                 }
         );
+        postRequest.setRetryPolicy(new DefaultRetryPolicy(5000,
+                15,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(postRequest);
     }
 
     public void searchActivities(final String search) {
-
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = "https://tesis-service.herokuapp.com/searchActivity";
-        String url2 = "http://192.168.1.14:8080/Tesis_SQL/searchActivity";
-        String url3="http://54.227.36.192:8080/Tesis_SQL/searchActivity";
-        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+        String url2 = "http://192.168.1.15:8080/Tesis_SQL/searchActivity";
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // response
-                        System.out.println("***** " + response);
                         JSONParser jp = new JSONParser();
                         JSONObject obj;
-
                         try {
                             obj = (JSONObject) jp.parse(response);
                             JSONArray ja = (JSONArray) obj.get("act");
@@ -247,11 +245,8 @@ public class ActivitiesFragment extends Fragment{
                             for(int i=0;i<ja.size();i++){
                                 l.add((JSONObject)ja.get(i));
                             }
-
                             adapter.notifyDataSetChanged();
-
                             pDialog.dismiss();
-
                         } catch (ParseException e) {
                             Toast.makeText(getActivity(),e.toString(), Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
