@@ -186,7 +186,7 @@ public class ActivitiesFragment extends Fragment{
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = "https://tesis-service.herokuapp.com/getActivities";
-        String url2 = "http://192.168.1.15:8080/Tesis_SQL/getActivities";
+        String url2 = "http://192.168.43.33:8080/Tesis_SQL/getActivities";
         StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
                 new Response.Listener<String>() {
                     @Override
@@ -231,7 +231,7 @@ public class ActivitiesFragment extends Fragment{
     public void searchActivities(final String search) {
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = "https://tesis-service.herokuapp.com/searchActivity";
-        String url2 = "http://192.168.1.15:8080/Tesis_SQL/searchActivity";
+        String url2 = "http://192.168.43.33:8080/Tesis_SQL/searchActivity";
         StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
                 new Response.Listener<String>() {
                     @Override

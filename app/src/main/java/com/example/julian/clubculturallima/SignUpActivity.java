@@ -137,7 +137,7 @@ public class SignUpActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         String url = "https://tesis-service.herokuapp.com/signup";
-        String url2 = "http://192.168.1.15:8080/Tesis_SQL/signup";
+        String url2 = "http://192.168.43.33:8080/Tesis_SQL/signup";
         // Request a string response from the provided URL.
         StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
                 new Response.Listener<String>() {
@@ -190,7 +190,7 @@ public class SignUpActivity extends AppCompatActivity {
     public void validar(final String cod) {
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "https://tesis-service.herokuapp.com/validarCodigo";
-        String url2 = "http://192.168.1.15:8080/Tesis_SQL/validarCodigo";
+        String url2 = "http://192.168.43.33:8080/Tesis_SQL/validarCodigo";
         // Request a string response from the provided URL.
         StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
                 new Response.Listener<String>() {

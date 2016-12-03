@@ -236,7 +236,7 @@ public class DetailActivityFragment extends Fragment {
         final RequestQueue queue = Volley.newRequestQueue(getActivity());
 
         String url = "https://tesis-service.herokuapp.com/puntuar";
-        String url2 = "http://192.168.1.15:8080/Tesis_SQL/puntuar";
+        String url2 = "http://192.168.43.33:8080/Tesis_SQL/puntuar";
 
         // Request a string response from the provided URL.
 
@@ -278,7 +278,7 @@ public class DetailActivityFragment extends Fragment {
         final RequestQueue queue = Volley.newRequestQueue(getActivity());
 
         String url = "https://tesis-service.herokuapp.com/estad";
-        String url2 = "http://192.168.1.15:8080/Tesis_SQL/estad";
+        String url2 = "http://192.168.43.33:8080/Tesis_SQL/estad";
         // Request a string response from the provided URL.
 
         final StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
@@ -320,7 +320,7 @@ public class DetailActivityFragment extends Fragment {
         final RequestQueue queue = Volley.newRequestQueue(getActivity());
 
         String url = "https://tesis-service.herokuapp.com/Asistencia";
-        String url2 = "http://192.168.1.15:8080/Tesis_SQL/Asistencia";
+        String url2 = "http://192.168.43.33:8080/Tesis_SQL/Asistencia";
         // Request a string response from the provided URL.
 
         final StringRequest postRequest = new StringRequest(Request.Method.POST, url2,

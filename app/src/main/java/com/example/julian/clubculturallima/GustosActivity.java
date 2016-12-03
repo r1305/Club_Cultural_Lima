@@ -96,7 +96,7 @@ public class GustosActivity extends AppCompatActivity {
     public void guardarGustos(final String correo) {
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "https://tesis-service.herokuapp.com/gustos";
-        String url2 = "http://192.168.1.15:8080/Tesis_SQL/gustos";
+        String url2 = "http://192.168.43.33:8080/Tesis_SQL/gustos";
         StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
                 new Response.Listener<String>() {
                     @Override

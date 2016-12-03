@@ -134,7 +134,7 @@ public class RecoFragment extends Fragment {
     public void getRecomendacion(final String id) {
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = "https://tesis-service.herokuapp.com/recomendacion";
-        String url2 = "http://192.168.1.15:8080/Tesis_SQL/recomendacion";
+        String url2 = "http://192.168.43.33:8080/Tesis_SQL/recomendacion";
         StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
                 new Response.Listener<String>() {
                     @Override

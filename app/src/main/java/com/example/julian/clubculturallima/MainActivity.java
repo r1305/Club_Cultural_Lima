@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final RequestQueue queue = Volley.newRequestQueue(this);
 
         String url = "https://tesis-service.herokuapp.com/Usuario";
-        String url2="http://192.168.1.15:8080/Tesis_SQL/Usuario";
+        String url2="http://192.168.43.33:8080/Tesis_SQL/Usuario";
 
         // Request a string response from the provided URL.
         final StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
